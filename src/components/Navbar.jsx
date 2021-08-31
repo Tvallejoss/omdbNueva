@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "../style/navbar.css";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { db } from "../firebase/base";
 import axios from "axios";
 import { setPeliculas } from "../store/peliculas";
 import { setFavorites, setUsuariolog } from "../store/users";
-import { CardMovie } from "./CardMovie";
+import { Header } from "./components/Header";
+import { PerfilScreen } from "./components/PerfilScreen";
 
 export const Navbar = () => {
+    const location = useLocation();
     const dispatch = useDispatch();
     let usuarioId = useSelector((state) => state.usuarioId);
     let favorites = useSelector((state) => state.favorites);
-    let peliculas = useSelector((state) => state.peliculas);
     const [usuarioLogueado, setUsuarioLogueado] = useState("");
     const [pelicula, setPelicula] = useState("");
     useEffect(() => {
@@ -30,7 +31,7 @@ export const Navbar = () => {
             .then((data) => {
                 dispatch(setPeliculas(data.data.Search));
             });
-    }, [usuarioId, pelicula, favorites]);
+    }, [usuarioId, pelicula, favorites, dispatch]);
 
     const searchMovie = (e) => {
         if (e.keyCode === 13) {
@@ -50,11 +51,18 @@ export const Navbar = () => {
                     {usuarioId ? (
                         <>
                             <li onClick={logOut}>Log0ut</li>
-                            <Link to={`/profile/${usuarioId}`}  style={{
+                            {location.pathname === "/" ? (
+                                <Link
+                                    to={`/profile/${usuarioId}`}
+                                    style={{
                                         color: "#fff",
-                                    }}>
-                                <li>Profile</li>{" "}
-                            </Link>
+                                    }}
+                                >
+                                    <li>Profile</li>{" "}
+                                </Link>
+                            ) : (
+                                ""
+                            )}
                             <li>¡Hi {usuarioLogueado.name}!</li>
                         </>
                     ) : (
@@ -72,41 +80,22 @@ export const Navbar = () => {
                         </>
                     )}
                     <div className="wrap">
-                        <div className="search">
-                            <input
-                                type="text"
-                                className="searchTerm"
-                                placeholder="Search a movie"
-                                onKeyUp={searchMovie}
-                            />
-                        </div>
+                        {location.pathname === "/" ? (
+                            <div className="search">
+                                <input
+                                    type="text"
+                                    className="searchTerm"
+                                    placeholder="Search a movie"
+                                    onKeyUp={searchMovie}
+                                />
+                            </div>
+                        ) : (
+                            ""
+                        )}
                     </div>
                 </ul>
             </nav>
-            <div
-                id="header"
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    flexWrap: "wrap",
-                    paddingTop: "150px",
-                }}
-            >
-                {peliculas.length
-                    ? peliculas.map((pelicula, i) => {
-                          return (
-                              <div
-                                  key={i}
-                                  style={{
-                                      margin: "35px",
-                                  }}
-                              >
-                                  <CardMovie props={pelicula} />
-                              </div>
-                          );
-                      })
-                    : ""}
-            </div>
+            {location.pathname === "/" ? <Header /> : <PerfilScreen />}
         </div>
     );
 };

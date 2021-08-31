@@ -1,9 +1,11 @@
 import React from 'react'
+import { CardMovie } from '../CardMovie';
+import { useSelector } from "react-redux";
 
 export const Header = () => {
     let peliculas = useSelector((state) => state.peliculas);
 
-    
+
     return (
         <>
              <div
