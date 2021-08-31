@@ -5,12 +5,13 @@ import { Link } from "react-router-dom";
 import { db } from "../firebase/base";
 import axios from "axios";
 import { setPeliculas } from "../store/peliculas";
-import { setUsuariolog } from "../store/users";
+import { setFavorites, setUsuariolog } from "../store/users";
 import { CardMovie } from "./CardMovie";
 
 export const Navbar = () => {
     const dispatch = useDispatch();
     let usuarioId = useSelector((state) => state.usuarioId);
+    let favorites = useSelector((state) => state.favorites);
     let peliculas = useSelector((state) => state.peliculas);
     const [usuarioLogueado, setUsuarioLogueado] = useState("");
     const [pelicula, setPelicula] = useState("");
@@ -21,6 +22,7 @@ export const Navbar = () => {
                 .get()
                 .then((res) => {
                     setUsuarioLogueado(res.data());
+                    dispatch(setFavorites(res.data().favoritesMovies));
                 });
         }
         axios
@@ -28,7 +30,7 @@ export const Navbar = () => {
             .then((data) => {
                 dispatch(setPeliculas(data.data.Search));
             });
-    }, [usuarioId, pelicula, dispatch]);
+    }, [usuarioId, pelicula, favorites]);
 
     const searchMovie = (e) => {
         if (e.keyCode === 13) {
@@ -40,7 +42,6 @@ export const Navbar = () => {
     const logOut = () => {
         dispatch(setUsuariolog(""));
     };
-
     return (
         <div>
             <nav className="navigation">
@@ -49,7 +50,11 @@ export const Navbar = () => {
                     {usuarioId ? (
                         <>
                             <li onClick={logOut}>Log0ut</li>
-                            <li>Profile</li>
+                            <Link to={`/profile/${usuarioId}`}  style={{
+                                        color: "#fff",
+                                    }}>
+                                <li>Profile</li>{" "}
+                            </Link>
                             <li>¡Hi {usuarioLogueado.name}!</li>
                         </>
                     ) : (
