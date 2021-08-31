@@ -17,6 +17,14 @@ export const Navbar = () => {
     const [usuarioLogueado, setUsuarioLogueado] = useState("");
     const [pelicula, setPelicula] = useState("");
     useEffect(() => {
+        axios
+            .get(`https://www.omdbapi.com/?apikey=20dac387&s=${pelicula}`)
+            .then((data) => {
+                dispatch(setPeliculas(data.data.Search));
+            });
+    }, [pelicula, favorites]);
+
+    useEffect(() => {
         if (usuarioId) {
             db.collection("users")
                 .doc(usuarioId)
@@ -26,13 +34,7 @@ export const Navbar = () => {
                     dispatch(setFavorites(res.data().favoritesMovies));
                 });
         }
-        axios
-            .get(`https://www.omdbapi.com/?apikey=20dac387&s=${pelicula}`)
-            .then((data) => {
-                dispatch(setPeliculas(data.data.Search));
-            });
-    }, [usuarioId, pelicula, favorites, dispatch]);
-
+    }, [usuarioId]);
     const searchMovie = (e) => {
         if (e.keyCode === 13) {
             setPelicula(e.target.value);
