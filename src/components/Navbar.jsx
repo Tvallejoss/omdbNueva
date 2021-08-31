@@ -34,7 +34,7 @@ export const Navbar = () => {
                     dispatch(setFavorites(res.data().favoritesMovies));
                 });
         }
-    }, [usuarioId]);
+    }, [usuarioId , favorites]);
     const searchMovie = (e) => {
         if (e.keyCode === 13) {
             setPelicula(e.target.value);
@@ -60,10 +60,17 @@ export const Navbar = () => {
                                         color: "#fff",
                                     }}
                                 >
-                                    <li>Profile</li>{" "}
+                                    <li>Profile</li>
                                 </Link>
                             ) : (
-                                ""
+                                <Link
+                                    to="/"
+                                    style={{
+                                        color: "#fff",
+                                    }}
+                                >
+                                    <li>Home</li>
+                                </Link>
                             )}
                             <li>¡Hi {usuarioLogueado.name}!</li>
                         </>

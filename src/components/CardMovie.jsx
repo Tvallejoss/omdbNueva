@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import "../style/cardMovie.css";
 import { db } from "../firebase/base";
@@ -31,8 +31,6 @@ export const CardMovie = ({ props }) => {
             }
         }
     };
-
-
 
     return (
         <div className="flip-card">
