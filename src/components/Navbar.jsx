@@ -18,7 +18,7 @@ export const Navbar = () => {
     const [pelicula, setPelicula] = useState("");
     useEffect(() => {
         axios
-            .get(`https://www.omdbapi.com/?apikey=20dac387&s=${pelicula}`)
+            .get(`https://www.omdbapi.com/?apikey=f0d06369=${pelicula}`)
             .then((data) => {
                 dispatch(setPeliculas(data.data.Search));
             });
@@ -52,7 +52,7 @@ export const Navbar = () => {
                     <span className="logo">OMDB-Tomas Vallejos Semino</span>
                     {usuarioId ? (
                         <>
-                            <li onClick={logOut}>Log0ut</li>
+                            <li onClick={logOut}>logout</li>
                             {location.pathname === "/" ? (
                                 <Link
                                     to={`/profile/${usuarioId}`}
