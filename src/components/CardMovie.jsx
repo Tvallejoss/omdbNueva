@@ -38,7 +38,7 @@ export const CardMovie = ({ props }) => {
                 <div className="flip-card-front">
                     <img
                         src={props.Poster}
-                        alt="Posters"
+                        alt="Posterss"
                         style={{
                             width: "270px",
                             height: "450px",
